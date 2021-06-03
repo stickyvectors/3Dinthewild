@@ -3,6 +3,10 @@ import {OrbitControls} from "./three/examples/jsm/controls/OrbitControls.js";
 
 const canvas = document.getElementById('canvas');
 
+//clock
+const clock = new THREE.Clock();
+var prevTime = performance.now();
+var upTime = 0;
 //basic setup
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
@@ -39,7 +43,7 @@ cube.scale.set(2,2,2);
 cube.position.set(4, 1.5, 0);
 scene.add( cube );
 //sphere
-geometry = new THREE.SphereGeometry(1,16,16);
+geometry = new THREE.SphereGeometry(2,16,16);
 const standardMaterial = new THREE.MeshStandardMaterial({
   roughness: 0.6,
   metalness: 0.0,
@@ -64,7 +68,17 @@ const directionalLight = new THREE.DirectionalLight(new THREE.Color(1,1,1), 1);
 scene.add(directionalLight);
 //animate functions
 function animate() {
+  var currentTime = performance.now();
+  var delta = (currentTime - prevTime) / 1000;
+  prevTime = currentTime;
+  upTime += delta;
   requestAnimationFrame(animate);
+  //do things!
+  torus.rotation.y += (delta*2);
+  sphere.position.y = Math.sin(upTime*3);
+  //change emission strength
+  sphere.material.emissiveIntensity = Math.sin(upTime) + 1;
+
   controls.update();
   renderer.render(scene, camera);
 }
