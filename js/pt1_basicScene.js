@@ -1,3 +1,5 @@
+import * as THREE from "./three/build/three.module.js";
+
 const canvas = document.getElementById('canvas');
 
 //basic setup

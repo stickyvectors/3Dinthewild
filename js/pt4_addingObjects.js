@@ -1,3 +1,6 @@
+import * as THREE from "./three/build/three.module.js";
+import {OrbitControls} from "./three/examples/jsm/controls/OrbitControls.js";
+
 const canvas = document.getElementById('canvas');
 
 //basic setup
@@ -14,20 +17,35 @@ bindEventListeners();
 
 //scene background
 scene.background = new THREE.Color(0.5,0.5,0.5);
-//position camera
+//position camera and create controls
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.target = new THREE.Vector3();
 camera.position.set(1,2,10);
-camera.lookAt(new THREE.Vector3());
+controls.update();
 //create objects and stuff
 const axesHelper = new THREE.AxesHelper(5);
 scene.add(axesHelper);
-
-const geometry = new THREE.BoxGeometry();
+//cube
+var geometry = new THREE.BoxGeometry(1,3,0.7);
 const material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 const cube = new THREE.Mesh( geometry, material );
+cube.scale.set(2,2,2);
+cube.position.set(4, 1.5, 0);
 scene.add( cube );
+//sphere
+geometry = new THREE.SphereGeometry(1,16,16);
+const sphere = new THREE.Mesh(geometry, material);
+sphere.position.set(-4, 0, 0);
+scene.add( sphere );
+//torus
+geometry = new THREE.TorusGeometry(1,0.7, 32, 16);
+const torus = new THREE.Mesh(geometry, material);
+torus.position.set(0,0,2);
+scene.add(torus);
 //animate functions
 function animate() {
   requestAnimationFrame(animate);
+  controls.update();
   renderer.render(scene, camera);
 }
 //begin animating
